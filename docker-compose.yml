@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  mockbackendapi:
+    image: mockbackendapi
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 5000:5000
+    
+    mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+    redis:
+    image: redis
+    ports: 
+      - 6379:6379
+    
+
+
