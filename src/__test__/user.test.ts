@@ -37,7 +37,6 @@ describe("POST /signup ", () => {
 	it("should signup user successfully", (done: DoneCallback) => {
 		
 		supertest(app).post("/api/v1/signup").send(userMock).end((err, res: Response) => {
-			console.log(res.body);
 			if (err) done(err);
 			expect(res.status).toBe(201);
 			expect(res.body.token).toContain("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9");
