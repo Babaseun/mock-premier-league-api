@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { User } from "../models/user";
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import config from "../config/config";
 import { IGetUserAuthInfoRequest, ITokenAttributes } from "../contracts";
 
@@ -18,7 +18,11 @@ const Auth = {
 			req.user = decoded;
 			next();
 		} catch (error) {
-			return res.status(401).send({ message: "Invalid auth token provided or user unauthorized!", error });
+			const expired = error as TokenExpiredError;
+			if (expired)
+			return res.status(400).send({ message:  expired.message });
+			
+			return res.status(400).send({ message: "Invalid auth token provided", error });
 		}
 	},
 };
