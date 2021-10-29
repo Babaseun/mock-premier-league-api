@@ -6,6 +6,7 @@ import {
 } from "../contracts";
 import { StatusCodes } from "http-status-codes";
 import { Fixture } from "../models/fixture";
+import { User } from "../models/user";
 
 export class FixtureService {
 	async addFixture(fixture: IFixtureAttributes): Promise<IResponse> {
@@ -183,16 +184,17 @@ export class FixtureService {
 		try {
 			let { perPage, pageNumber } = pagination;
 			let { name, date, stadium, status } = criteria;
+			
 			perPage = perPage && Number.isInteger(perPage) ? perPage : 5;
 			pageNumber = pageNumber && Number.isInteger(pageNumber) ? pageNumber : 1;
 			if (name || date || stadium || status) {
-				stadium = new RegExp(`^${stadium}$`, "i");
 				const fixtures = await Fixture.find({
 					$or: [
-						{ status },
-						{ "homeTeam.0.name": new RegExp(`^${name}$`, "i") },
-						{ "awayTeam.0.name": new RegExp(`^${name}$`, "i") },
-						{ matchInfo: { $elemMatch: { date, stadium } } },
+						{ "status":status },
+						{ "kickoff": date },
+						{"stadium" :stadium },
+						{ "awayTeam": name },
+						{ "homeTeam": name },
 					],
 				}).skip((
 					pageNumber - 1) * perPage).limit(perPage).sort({ createdAt: -1 }).exec();

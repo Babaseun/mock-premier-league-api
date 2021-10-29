@@ -10,8 +10,8 @@ const stadiums = ["Vitality Stadium", "The Amex", "Turf Moor", "Cardiff City Sta
 	"Emirates Stadium", "Stamford Bridge", "Selhurst Park", "Craven Cottage",
 	"Wembley Stadium", "London Stadium", "Etihad Stadium", "Old Trafford",
 	"St James Park", "St Mary's Stadium", "Vicarage Road", "Molineux Stadium"];
+
 const fixtureSchema = new Schema<IFixtureAttributes>({
-	kickoff: Date,
 	homeTeam: {
 		type: String,
 		enum: teams,
@@ -21,14 +21,13 @@ const fixtureSchema = new Schema<IFixtureAttributes>({
 		enum: teams,
 	},
 	status: { type: String, default: "pending" },
-	matchInformation: {
-		type: Array,
-		date: Date,
-		stadium: {
-			type: String,
-			enum: stadiums,
-		},
+	stadium: {
+		type: String,
+		enum: stadiums,
 	},
+	kickoff: { type: Date },
+	homeTeam_score: { type: Number, default: 0 },
+	awayTeam_score: { type: Number, default: 0 },
 	createdAt: { type: Date, default: Date.now() },
 	updatedAt: { type: Date, default: Date.now() },
 });

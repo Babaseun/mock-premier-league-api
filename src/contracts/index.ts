@@ -24,9 +24,11 @@ export interface ITeamAttributes {
 export interface IFixtureAttributes {
   homeTeam: string;
   awayTeam: string;
-  kickoff: Date;
-  matchInformation: any;
   status: string;
+  stadium: string;
+  homeTeam_score: number;
+  awayTeam_score: number;
+  kickoff: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -69,7 +71,7 @@ export interface IResponse {
     | ITeamAttributes
     | ITeamsCollection;
   message?: string;
-  token?:string;
+  token?: string;
 }
 
 export interface IPaginationParameters {
