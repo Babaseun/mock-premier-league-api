@@ -9,10 +9,10 @@ fixtureRouter.post("/fixtures", fixtureRules["forAddFixture"], Auth.verifyToken,
 fixtureRouter.put("/fixtures/:ID", fixtureRules["forEditFixture"], Auth.verifyToken, FixtureController.EditFixture);
 fixtureRouter.delete("/fixtures/:ID", Auth.verifyToken, FixtureController.RemoveFixture);
 fixtureRouter.get("/fixtures", Auth.verifyToken, FixtureController.GetAllFixtures);
-fixtureRouter.get("/fixture/completed", Auth.verifyToken, FixtureController.GetCompletedFixtures);
-fixtureRouter.get("/fixture/pending", Auth.verifyToken, FixtureController.GetPendingFixtures);
-fixtureRouter.post("/fixture/search", FixtureController.SearchFixtures);
-fixtureRouter.get("/fixture/:ID", Auth.verifyToken, FixtureController.GetFixture);
+fixtureRouter.get("/fixtures/completed", Auth.verifyToken, FixtureController.GetCompletedFixtures);
+fixtureRouter.get("/fixtures/pending", Auth.verifyToken, FixtureController.GetPendingFixtures);
+fixtureRouter.post("/fixtures/search", fixtureRules["forSearchFixture"], FixtureController.SearchFixtures);
+fixtureRouter.get("/fixtures/:ID", Auth.verifyToken, FixtureController.GetFixture);
 
 
 
