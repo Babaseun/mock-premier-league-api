@@ -45,7 +45,7 @@ export class TeamService {
 			if (query)
 				return {
 					statusCode: StatusCodes.OK,
-					response: query,
+					response: team,
 				};
 			return {
 				statusCode: StatusCodes.NOT_FOUND,
@@ -109,6 +109,7 @@ export class TeamService {
 			
 		}
 	}
+	
 	async getTeam(_id: string): Promise<IResponse> {
 		try {
 			const team = await Team.findById({ _id }).exec();
@@ -130,19 +131,19 @@ export class TeamService {
 			};
 		}
 	}
+	
 	async searchTeam(criteria: ITeamSearchCriteria): Promise<IResponse> {
 		try {
-			let { name, description,memberName,role } = criteria;
-		
+			let { name, description, memberName, role } = criteria;
+			
 			if (name || role || description || memberName) {
 				const teams = await Team.find({
 					$or: [
-						{ clubName: new RegExp(`^${name}$`, 'i') },
-						{ description: new RegExp(`^${description}$`, 'i') },
-						{ 'players.0.name': new RegExp(`^${memberName}$`, 'i') }
-					]
-				})
-				.exec();
+						{ "clubName": name },
+						{ "description": description },
+						{ "players.0.name": new RegExp(`^${memberName}$`, "i") },
+					],
+				}).exec();
 				return {
 					statusCode: StatusCodes.OK,
 					response: {
