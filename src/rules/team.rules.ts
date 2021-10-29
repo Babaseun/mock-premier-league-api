@@ -1,4 +1,5 @@
 import { check } from 'express-validator';
+import moment from "moment/moment";
 
 export const teamRules = {
 	forAddTeam: [
@@ -10,11 +11,17 @@ export const teamRules = {
 	
 	],
 	forEditTeam: [
-		check('teamName')
+		check('clubName')
 		.optional()
 		.not()
 		.isEmpty()
-		.withMessage('teamName field is required'),
-		check('teamMembers').optional().isArray().withMessage('teamMembers array is required')
+		.withMessage('clubName is required'),
+		check('players').optional().isArray().withMessage('players array is required')
+	],
+	forSearchTeam: [
+		check("name").optional().not().isEmpty().withMessage("name field is required"),
+		check("description").optional().not().isEmpty().withMessage("description field is required"),
+		check("role").optional().not().isEmpty().withMessage("role field is required"),
+		check("memberName.*.name").optional().not().isEmpty().withMessage("member name is required"),
 	],
 };
