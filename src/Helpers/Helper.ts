@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import config from "../config/config";
 import { ITokenAttributes } from "../contracts";
+import dotenv from "dotenv";
+dotenv.config();
 
 const Helper = {
 	generateToken(tokenAttributes: ITokenAttributes): string {
-		return jwt.sign({ tokenAttributes }, config.SECRET, {
+		return jwt.sign({ tokenAttributes }, process.env.SECRET!, {
 			expiresIn: "1d",
 		});
 	},

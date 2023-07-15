@@ -11,9 +11,10 @@ import express from "express";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import redis from "redis";
-import config from "./config/config";
 import http from "http";
 import rateLimit from "express-rate-limit";
+import dotenv from "dotenv";
+dotenv.config();
 
 // limit IP requests
 const limiter = rateLimit({
@@ -22,12 +23,12 @@ const limiter = rateLimit({
 });
 
 const app = express();
-
-if (config.NODE_ENV !== "test") {
+const {NODE_ENV, REDIS_HOST, REDIS_PORT, REDIS_SECRET} = process.env;
+if (NODE_ENV !== "test") {
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({
-    host: "redis",
-    port: 6379,
+    host: REDIS_HOST,
+    port: Number(REDIS_PORT),
   });
   redisClient.on("error", (err) => {
     console.log("Could not establish a connection with redis. " + err);
@@ -35,11 +36,11 @@ if (config.NODE_ENV !== "test") {
   redisClient.on("connect", (err) => {
     console.log("Connected to redis successfully");
   });
-  app.use(rateLimit);
+  app.use(limiter);
   app.use(
     session({
       store: new RedisStore({ client: redisClient }),
-      secret: config.REDIS_SECRET,
+      secret: REDIS_SECRET!,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -101,10 +102,10 @@ app.use("*", (req, res) => {
 
 const PORT = 5000 || process.env.PORT;
 const server = http.createServer(app);
-if (config.NODE_ENV !== "test") {
+if (NODE_ENV !== "test") {
   server.listen(PORT, async () => {
     await connect();
-    console.log(`Server listening: http://localhost: ${PORT}`);
+    console.log(`Server listening: http://localhost:${PORT}`);
   });
 }
 export default app;

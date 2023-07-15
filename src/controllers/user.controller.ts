@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { matchedData } from "express-validator";
 import { validationResult } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import { token } from "morgan";
 import { IUserAttributes } from "../contracts";
 import UserService from "../services/user.service";
 

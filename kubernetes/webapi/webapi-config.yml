@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapi-configmap
+data:
+  jwt_secret: "cXAyb2RtcG1lbW1jbXd1cXFjZnFmcTQyMzE3MzA5NzYjQCE="
+  environment: ""
+  redis_secret: "cXAyb2RtcG1lbW1jbXd1cXFjZnFmcTQyMzE3MzA5NzYjQCE="
+  redis_port: "53435"
+  redis_host: "localhost" 
+  port: "5000"
+  dburi: "mongodb://10.102.193.196:27018"

@@ -1,31 +1,25 @@
-import config from "../config/config";
 import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
 
-const mongoServer = new MongoMemoryServer();
-
-const dbUri = config.dbUri;
+const { DBURI, NODE_ENV } = process.env;
 
 export async function connect() {
-	if (config.NODE_ENV !== "test") {
+	if (NODE_ENV !== "test") {
 		
 		try {
-			await mongoose.connect(dbUri);
+			await mongoose.connect(DBURI!);
 			console.info("DB connected");
 		} catch (error) {
-			console.error("Could not connect to db");
+			console.error("Could not connect to db. " + error);
+			console.error("DBURI: " + DBURI);
 			process.exit(1);
 		}
 	} else {
-		const mongo = await MongoMemoryServer.create();
-		const uri = mongo.getUri();
 		
-		await mongoose.connect(uri);
 	}
 }
 
 export async function close() {
-	if (config.NODE_ENV !== "test") {
+	if (process.env.NODE_ENV !== "test") {
 		
 		try {
 			await mongoose.disconnect();
@@ -38,7 +32,7 @@ export async function close() {
 	} else {
 		await mongoose.connection.dropDatabase();
 		await mongoose.connection.close();
-		await mongoServer.stop();
+		// await mongoServer.stop();
 	}
 	
 }

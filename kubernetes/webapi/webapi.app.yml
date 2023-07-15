@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapi-deployment
+  labels:
+    app: webapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapi
+  template:
+    metadata:
+      labels:
+        app: webapi
+    spec:
+      containers:
+        - name: mock-premier-league-api
+          image: onibokun/mockpremierleagueapi
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DBURI
+              valueFrom:
+                configMapKeyRef:
+                  name: webapi-configmap
+                  key: dburi
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: webapi-configmap
+                  key: redis_host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: webapi-configmap
+                  key: redis_port
+            - name: REDIS_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: webapi-configmap
+                  key: redis_secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapi-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9991
+      targetPort: 5000
+      protocol: TCP
+  selector:
+    app: webapi
