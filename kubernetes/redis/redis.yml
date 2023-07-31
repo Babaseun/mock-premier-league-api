@@ -27,7 +27,6 @@ kind: Service
 metadata:
   name: redis-service
 spec:
-  type: LoadBalancer
   ports: 
     - port: 6379
       targetPort: 6379
